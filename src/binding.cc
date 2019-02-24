@@ -16,8 +16,6 @@
 
 #include "iconv.h"
 #include "napi.h"
-#include "uv.h"
-#include "node_buffer.h"
 
 #include <errno.h>
 #include <assert.h>
@@ -26,9 +24,6 @@
 #ifndef ICONV_CONST
 #define ICONV_CONST
 #endif  // ICONV_CONST
-
-
-using namespace Napi;
 
 struct Iconv: Napi::ObjectWrap<Iconv>
 {
@@ -54,10 +49,10 @@ struct Iconv: Napi::ObjectWrap<Iconv>
   static Napi::Object Initialize(Napi::Env env, Napi::Object exports)
   {
     Iconv::Init(env);
-    exports.Set(Napi::String::New(env, "make"),
-             Napi::Function::New(env, Make));
+    exports.Set(Napi::String::New(env, "make"), 
+                Napi::Function::New(env, Make));
     exports.Set(Napi::String::New(env, "convert"),
-             Napi::Function::New(env, Convert));
+                Napi::Function::New(env, Convert));
 #define EXPORT_ERRNO(err) \
     exports.Set(Napi::String::New(env, #err), Napi::Number::New(env, err))
     EXPORT_ERRNO(EINVAL);
@@ -116,7 +111,6 @@ struct Iconv: Napi::ObjectWrap<Iconv>
   // Forbid implicit copying.
   Iconv(const Iconv&);
   void operator=(const Iconv&);
-
 };
 
 Napi::FunctionReference Iconv::object_template; // iconv_constructor
